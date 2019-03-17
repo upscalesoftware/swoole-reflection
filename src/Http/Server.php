@@ -39,6 +39,17 @@ class Server
     }
 
     /**
+     * Assign a middleware handling requests of the server, overriding the existing one
+     *
+     * @param callable $middleware
+     * @throws \UnexpectedValueException
+     */
+    public function setMiddleware(callable $middleware)
+    {
+        $this->server->on('request', $middleware);
+    }
+
+    /**
      * Retrieve the primary port listened by the server
      * 
      * @return \Swoole\Server\Port
