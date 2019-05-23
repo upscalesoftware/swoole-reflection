@@ -12,8 +12,8 @@
         }
     ],
     "require": {
-        "php": ">=5.3",
-        "ext-swoole": "^4.0.0"
+        "php": ">=5.4",
+        "ext-swoole": "^4.0"
     },
     "autoload": {
         "psr-4": {"Upscale\\Swoole\\Reflection\\": "src/"}

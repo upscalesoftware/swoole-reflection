@@ -4,8 +4,8 @@ Swoole Reflection API
 This library provides a [Reflection API](http://us3.php.net/manual/en/intro.reflection.php) for classes of [Swoole](https://www.swoole.co.uk/) web-server.
 
 **Features:**
-- Retrieve server middleware callback
-- Retrieve server primary port instance
+- Server middleware manipulation
+- Response lifecycle tracking
 
 ## Installation
 
@@ -14,6 +14,8 @@ The library is to be installed via [Composer](https://getcomposer.org/) as a dep
 composer require upscale/swoole-reflection
 ```
 ## Usage
+
+### Middleware Manipulation
 
 Retrieve server middleware callback retroactively:
 ```php
@@ -39,6 +41,20 @@ echo get_class($middleware);  // Outputs Example\Swoole\Middleware
 
 $server->start();
 ```
+
+### Response Tracking
+
+Modify response headers before they have been sent:
+```php
+$server->on('request', function ($request, $response) {
+    $response = new \Upscale\Swoole\Reflection\Http\Response\Observable($response);
+    $response->onHeadersSentBefore(function () use ($request, $response) {
+        $response->header('Content-Type', 'text/plain');
+    });    
+    $response->end("Served by Swoole server\n");
+});
+```
+
 
 ## Contributing
 
