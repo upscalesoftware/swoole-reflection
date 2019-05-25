@@ -18,11 +18,17 @@ class Observable extends Proxy
     protected $headersSentObservers = [];
 
     /**
+     * @var callable[] 
+     */
+    protected $bodyAppendObservers = [];
+
+    /**
      * {@inheritdoc}
      */
     public function end($content = '')
     {
         $this->doHeadersSentBefore();
+        $this->doBodyAppend($content);
         return parent::end($content);
     }
 
@@ -32,6 +38,7 @@ class Observable extends Proxy
     public function write($content)
     {
         $this->doHeadersSentBefore();
+        $this->doBodyAppend($content);
         return parent::write($content);
     }
 
@@ -55,7 +62,17 @@ class Observable extends Proxy
     }
 
     /**
-     * Notify registered observers
+     * Subscribe a callback to be notified upon appending body content
+     * 
+     * @param callable $callback
+     */
+    public function onBodyAppend(callable $callback)
+    {
+        $this->bodyAppendObservers[] = $callback;
+    }
+
+    /**
+     * Notify registered header lifecycle observers
      */
     protected function doHeadersSentBefore()
     {
@@ -63,6 +80,19 @@ class Observable extends Proxy
             $this->isHeadersSent = true;
             foreach ($this->headersSentObservers as $callback) {
                 $callback();
+            }
+        }
+    }
+    /**
+     * Notify registered body lifecycle observers allowing them to modify content 
+     * 
+     * @param string $content
+     */
+    protected function doBodyAppend(&$content)
+    {
+        if (strlen($content) > 0) {
+            foreach ($this->bodyAppendObservers as $callback) {
+                $callback($content);
             }
         }
     }

@@ -42,7 +42,9 @@ echo get_class($middleware);  // Outputs Example\Swoole\Middleware
 $server->start();
 ```
 
-### Response Tracking
+### Response Lifecycle
+
+#### Headers Tracking
 
 Modify response headers before they have been sent:
 ```php
@@ -55,6 +57,23 @@ $server->on('request', function ($request, $response) {
 });
 ```
 
+Callback is invoked once per request upon the first call to `\Swoole\Http\Response::write/end/sendfile()` methods.
+
+#### Body Interception
+
+Modify response body before sending it out:
+```php
+$server->on('request', function ($request, $response) use ($server) {
+    $response = new \Upscale\Swoole\Reflection\Http\Response\Observable($response);
+    $response->onBodyAppend(function (&$content) use ($server) {
+        $content .= "<!-- Served by worker {$server->worker_id} -->\n";
+    });
+    $response->header('Content-Type', 'text/html');
+    $response->end("Served by <b>Swoole server</b>\n");
+});
+```
+
+Callback is invoked on every call to `\Swoole\Http\Response::write/end()` methods with non-empty content.
 
 ## Contributing
 
