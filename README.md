@@ -17,27 +17,25 @@ composer require upscale/swoole-reflection
 
 ### Middleware Manipulation
 
-Retrieve server middleware callback retroactively:
+Override server middleware optionally reusing the original callback:
 ```php
-namespace Example\Swoole;
-
-require 'vendor/autoload.php';
-
-class Middleware
+class MiddlewareExample
 {
     public function __invoke($request, $response)
     {
-        $response->header('Content-Type', 'text/plain');
         $response->end("Served by Swoole server\n");
     }
 }
 
 $server = new \Swoole\Http\Server('127.0.0.1', 8080);
-$server->on('request', new Middleware());
+$server->on('request', new MiddlewareExample());
 
 $reflection = new \Upscale\Swoole\Reflection\Http\Server($server);
 $middleware = $reflection->getMiddleware();
-echo get_class($middleware);  // Outputs Example\Swoole\Middleware
+$reflection->setMiddleware(function ($request, $response) use ($middleware) {
+   $response->header('Content-Type', 'text/plain');
+   $middleware($request, $response);
+});
 
 $server->start();
 ```
