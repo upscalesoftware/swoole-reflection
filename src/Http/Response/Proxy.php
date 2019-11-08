@@ -68,7 +68,9 @@ class Proxy extends \Swoole\Http\Response
     public function cookie(
         $name, $value = null, $expires = null, $path = null, $domain = null, $secure = null, $httponly = null, $samesite = null
     ) {
-        $result = $this->subject->cookie($name, $value, $expires, $path, $domain, $secure, $httponly, $samesite);
+        $result = ($samesite === null)
+            ? $this->subject->cookie($name, $value, $expires, $path, $domain, $secure, $httponly)
+            : $this->subject->cookie($name, $value, $expires, $path, $domain, $secure, $httponly, $samesite);
         $this->cookie = $this->subject->cookie;
         return $result;
     }
@@ -87,7 +89,9 @@ class Proxy extends \Swoole\Http\Response
     public function rawcookie(
         $name, $value = null, $expires = null, $path = null, $domain = null, $secure = null, $httponly = null, $samesite = null
     ) {
-        $result = $this->subject->rawcookie($name, $value, $expires, $path, $domain, $secure, $httponly, $samesite);
+        $result = ($samesite === null)
+            ? $this->subject->rawcookie($name, $value, $expires, $path, $domain, $secure, $httponly)
+            : $this->subject->rawcookie($name, $value, $expires, $path, $domain, $secure, $httponly, $samesite);
         $this->cookie = $this->subject->cookie;
         return $result;
     }
@@ -99,10 +103,9 @@ class Proxy extends \Swoole\Http\Response
      */
     public function status($code, $reason = null)
     {
-        if ($reason !== null) {
-            return $this->subject->status($code, $reason);
-        }
-        return $this->subject->status($code);
+        return ($reason === null)
+            ? $this->subject->status($code)
+            : $this->subject->status($code, $reason);
     }
 
     /**
