@@ -62,12 +62,13 @@ class Proxy extends \Swoole\Http\Response
      * @param string $domain
      * @param bool $secure
      * @param bool $httponly
+     * @param bool $samesite
      * @return mixed
      */
     public function cookie(
-        $name, $value = null, $expires = null, $path = null, $domain = null, $secure = null, $httponly = null
+        $name, $value = null, $expires = null, $path = null, $domain = null, $secure = null, $httponly = null, $samesite = null
     ) {
-        $result = $this->subject->cookie($name, $value, $expires, $path, $domain, $secure, $httponly);
+        $result = $this->subject->cookie($name, $value, $expires, $path, $domain, $secure, $httponly, $samesite);
         $this->cookie = $this->subject->cookie;
         return $result;
     }
@@ -80,12 +81,13 @@ class Proxy extends \Swoole\Http\Response
      * @param string $domain
      * @param bool $secure
      * @param bool $httponly
+     * @param bool $samesite
      * @return mixed
      */
     public function rawcookie(
-        $name, $value = null, $expires = null, $path = null, $domain = null, $secure = null, $httponly = null
+        $name, $value = null, $expires = null, $path = null, $domain = null, $secure = null, $httponly = null, $samesite = null
     ) {
-        $result = $this->subject->rawcookie($name, $value, $expires, $path, $domain, $secure, $httponly);
+        $result = $this->subject->rawcookie($name, $value, $expires, $path, $domain, $secure, $httponly, $samesite);
         $this->cookie = $this->subject->cookie;
         return $result;
     }
