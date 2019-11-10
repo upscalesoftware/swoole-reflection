@@ -1,4 +1,4 @@
-Swoole Reflection API
+Swoole Reflection API [![Build Status](https://api.travis-ci.org/upscalesoftware/swoole-reflection.svg?branch=master)](https://travis-ci.org/upscalesoftware/swoole-reflection)
 =====================
 
 This library provides a [Reflection API](http://us3.php.net/manual/en/intro.reflection.php) for classes of [Swoole](https://www.swoole.co.uk/) web-server.
