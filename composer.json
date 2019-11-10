@@ -15,7 +15,13 @@
         "php": ">=5.4",
         "ext-swoole": "^4.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0"
+    },
     "autoload": {
         "psr-4": {"Upscale\\Swoole\\Reflection\\": "src/"}
+    },
+    "autoload-dev": {
+        "psr-4": {"Upscale\\Swoole\\Reflection\\Tests\\": "tests/"}
     }
 }
