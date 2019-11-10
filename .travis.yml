@@ -14,6 +14,7 @@ env:
   - SWOOLE_VERSION=swoole
 
 before_install:
+  - phpenv config-rm xdebug.ini
   - pecl channel-update pecl.php.net
   - yes | pecl install -f $SWOOLE_VERSION
   - php --ri swoole
