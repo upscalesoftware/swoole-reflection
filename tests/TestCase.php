@@ -22,13 +22,20 @@ class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * Send an HTTP request and return response headers and body
      * 
-     * @param string $host
-     * @param int $port
+     * @param string $url
      * @param int $timeout Timeout in seconds
      * @return string
      */
-    public static function curl($host, $port = 80, $timeout = 10)
+    public static function curl($url, $timeout = 10)
     {
-        return `curl http://$host:$port/ -H 'Connection: close' -s -i -m $timeout`;
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HEADER, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, ['Connection: close']);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+        $result = curl_exec($curl);
+        curl_close($curl);
+        return $result;
     }
 }
