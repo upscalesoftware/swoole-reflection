@@ -20,6 +20,7 @@ class ProxyTest extends TestCase
         $this->server = new \Swoole\Http\Server('127.0.0.1', 8080);
         $this->server->set([
             'log_file' => '/dev/null',
+            'log_level' => 4,
             'worker_num' => 1,
         ]);
     }
