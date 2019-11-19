@@ -127,6 +127,7 @@ class ProxyTest extends TestCase
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
             $response = new Proxy($response);
             $response->status(404);
+            $response->end();
         });
         $this->spawn($this->server);
         
@@ -139,6 +140,7 @@ class ProxyTest extends TestCase
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
             $response = new Proxy($response);
             $response->status(404, 'Missing');
+            $response->end();
         });
         $this->spawn($this->server);
         
