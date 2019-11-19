@@ -148,6 +148,10 @@ class ProxyTest extends TestCase
 
     public function testGzip()
     {
+        if (version_compare(swoole_version(), '4.1.1', '>=')) {
+            $this->markTestSkipped();
+        }
+        
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
             $response = new Proxy($response);
             $response->gzip();
