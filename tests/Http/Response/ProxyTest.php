@@ -137,6 +137,11 @@ class ProxyTest extends TestCase
 
     public function testStatusReason()
     {
+        $method = new \ReflectionMethod(\Swoole\Http\Response::class, 'status');
+        if ($method->getNumberOfParameters() < 2) {
+            $this->markTestSkipped();
+        }
+        
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
             $response = new Proxy($response);
             $response->status(404, 'Missing');
