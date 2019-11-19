@@ -15,11 +15,6 @@ class ProxyTest extends TestCase
      */
     protected $server;
 
-    /**
-     * @var int
-     */
-    protected $pid;
-
     protected function setUp()
     {
         $this->server = new \Swoole\Http\Server('127.0.0.1', 8080);
@@ -27,12 +22,6 @@ class ProxyTest extends TestCase
             'log_file' => '/dev/null',
             'worker_num' => 1,
         ]);
-        $this->server->on('workerError', [$this->server, 'shutdown']);
-    }
-
-    protected function tearDown()
-    {
-        \Swoole\Process::kill($this->pid);
     }
 
     public function testEnd()
@@ -41,7 +30,7 @@ class ProxyTest extends TestCase
             $response = new Proxy($response);
             $response->end();
         });
-        $this->pid = $this->spawn($this->server);
+        $this->spawn($this->server);
 
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
@@ -54,7 +43,7 @@ class ProxyTest extends TestCase
             $response = new Proxy($response);
             $response->end('Test');
         });
-        $this->pid = $this->spawn($this->server);
+        $this->spawn($this->server);
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
@@ -69,7 +58,7 @@ class ProxyTest extends TestCase
             $response->write('Test1');
             $response->write('Test2');
         });
-        $this->pid = $this->spawn($this->server);
+        $this->spawn($this->server);
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
@@ -83,7 +72,7 @@ class ProxyTest extends TestCase
             $response->header('Content-Type', 'text/plain');
             $response->end();
         });
-        $this->pid = $this->spawn($this->server);
+        $this->spawn($this->server);
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
@@ -97,7 +86,7 @@ class ProxyTest extends TestCase
             $response->header('content-type', 'text/plain', true);
             $response->end();
         });
-        $this->pid = $this->spawn($this->server);
+        $this->spawn($this->server);
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
@@ -111,7 +100,7 @@ class ProxyTest extends TestCase
             $response->cookie('SID', 'test 123');
             $response->end();
         });
-        $this->pid = $this->spawn($this->server);
+        $this->spawn($this->server);
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
@@ -125,7 +114,7 @@ class ProxyTest extends TestCase
             $response->rawcookie('SID', 'test 123');
             $response->end();
         });
-        $this->pid = $this->spawn($this->server);
+        $this->spawn($this->server);
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
@@ -138,7 +127,7 @@ class ProxyTest extends TestCase
             $response = new Proxy($response);
             $response->status(404);
         });
-        $this->pid = $this->spawn($this->server);
+        $this->spawn($this->server);
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 404 Not Found\r\n", $result);
@@ -150,7 +139,7 @@ class ProxyTest extends TestCase
             $response = new Proxy($response);
             $response->status(404, 'Missing');
         });
-        $this->pid = $this->spawn($this->server);
+        $this->spawn($this->server);
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 404 Missing\r\n", $result);
@@ -163,7 +152,7 @@ class ProxyTest extends TestCase
             $response->gzip();
             $response->end('Test');
         });
-        $this->pid = $this->spawn($this->server);
+        $this->spawn($this->server);
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
@@ -176,7 +165,7 @@ class ProxyTest extends TestCase
             $response = new Proxy($response);
             $response->sendfile(__DIR__ . '/../../_files/fixture.txt');
         });
-        $this->pid = $this->spawn($this->server);
+        $this->spawn($this->server);
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
@@ -190,7 +179,7 @@ class ProxyTest extends TestCase
             $response = new Proxy($response);
             $response->sendfile(__DIR__ . '/../../_files/fixture.txt', 4);
         });
-        $this->pid = $this->spawn($this->server);
+        $this->spawn($this->server);
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
@@ -204,7 +193,7 @@ class ProxyTest extends TestCase
             $response = new Proxy($response);
             $response->sendfile(__DIR__ . '/../../_files/fixture.txt', 4, 3);
         });
-        $this->pid = $this->spawn($this->server);
+        $this->spawn($this->server);
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
