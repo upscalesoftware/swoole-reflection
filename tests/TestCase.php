@@ -12,28 +12,28 @@ class TestCase extends \PHPUnit\Framework\TestCase
      * 
      * @param \Swoole\Server $server
      * @param int $timeout
+     * @return \Swoole\Atomic Server shutdown semaphore
      */
     public static function spawn(\Swoole\Server $server, $timeout = 10)
     {
-        $lock = new \Swoole\Atomic;
+        $startup = new \Swoole\Atomic;
+        $shutdown = new \Swoole\Atomic;
         
-        $server->on('workerStart', function ($server) use ($lock, $timeout) {
-            $server->tick(100, function ($timerId) use ($server, $timeout) {
-                $status = $server->stats();
-                $served = $status['request_count'] ?? 0;
-                $uptime = time() - $status['start_time'];
-                if ($served > 0 || $uptime > $timeout) {
-                    $server->clearTimer($timerId);
-                    $server->shutdown();
-                }
-            });
-            $lock->wakeup();
+        $server->on('workerStart', function () use ($startup) {
+            $startup->wakeup();
         });
+        $watchdog = new \Swoole\Process(function () use ($server, $shutdown, $timeout) {
+            $shutdown->wait($timeout);
+            $server->shutdown();
+        });
+        $server->addProcess($watchdog);
         
         $process = new \Swoole\Process([$server, 'start']);
         $process->start();
         
-        $lock->wait($timeout);
+        $startup->wait($timeout);
+        
+        return $shutdown;
     }
 
     /**
