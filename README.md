@@ -19,16 +19,10 @@ composer require upscale/swoole-reflection
 
 Override server middleware optionally reusing the original callback:
 ```php
-class MiddlewareExample
-{
-    public function __invoke($request, $response)
-    {
-        $response->end("Served by Swoole server\n");
-    }
-}
-
 $server = new \Swoole\Http\Server('127.0.0.1', 8080);
-$server->on('request', new MiddlewareExample());
+$server->on('request', function ($request, $response) {
+   $response->end("Served by Swoole server\n");
+});
 
 $reflection = new \Upscale\Swoole\Reflection\Http\Server($server);
 $middleware = $reflection->getMiddleware();
