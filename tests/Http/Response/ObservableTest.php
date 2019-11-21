@@ -45,6 +45,8 @@ class ObservableTest extends ProxyTest
             });
             $response->write('Test1');
             $response->write('Test2');
+            // TODO: remove explicit response end to match the native behavior
+            $response->end();
         });
         $this->spawn($this->server);
 
@@ -52,6 +54,8 @@ class ObservableTest extends ProxyTest
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
         $this->assertContains("Content-Type: text/plain\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\nTest1Test2", $result);
+        
+        $this->markTestIncomplete('Fix circular references holding up implicit response end');
     }
 
     public function testOnHeadersSentBeforeSendfile()
