@@ -58,6 +58,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
+        $this->assertContains("Content-Type: text/html\r\n", $result);
         $this->assertContains("Content-Length: 4\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\nTest", $result);
     }
@@ -73,6 +74,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
+        $this->assertContains("Content-Type: text/html\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\nTest1Test2", $result);
     }
 
@@ -191,6 +193,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
+        $this->assertContains("Content-Type: text/html\r\n", $result);
         $this->assertContains("Content-Length: 10\r\n\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\n0123456789", $result);
     }
@@ -205,6 +208,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
+        $this->assertContains("Content-Type: text/html\r\n", $result);
         $this->assertContains("Content-Length: 6\r\n\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\n456789", $result);
     }
@@ -219,6 +223,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
+        $this->assertContains("Content-Type: text/html\r\n", $result);
         $this->assertContains("Content-Length: 3\r\n\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\n456", $result);
     }
