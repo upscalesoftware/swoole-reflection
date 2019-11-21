@@ -26,10 +26,19 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         ]);
     }
 
+    /**
+     * @param \Swoole\Http\Response $response
+     * @return Proxy
+     */
+    protected function proxy(\Swoole\Http\Response $response)
+    {
+        return new Proxy($response);
+    }
+
     public function testEnd()
     {
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-            $response = new Proxy($response);
+            $response = $this->proxy($response);
             $response->end();
         });
         $this->spawn($this->server);
@@ -42,7 +51,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
     public function testEndContent()
     {
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-            $response = new Proxy($response);
+            $response = $this->proxy($response);
             $response->end('Test');
         });
         $this->spawn($this->server);
@@ -56,7 +65,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
     public function testWriteContent()
     {
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-            $response = new Proxy($response);
+            $response = $this->proxy($response);
             $response->write('Test1');
             $response->write('Test2');
         });
@@ -70,7 +79,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
     public function testHeader()
     {
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-            $response = new Proxy($response);
+            $response = $this->proxy($response);
             $response->header('Content-Type', 'text/plain');
             $response->end();
         });
@@ -84,7 +93,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
     public function testHeaderUcwords()
     {
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-            $response = new Proxy($response);
+            $response = $this->proxy($response);
             $response->header('content-type', 'text/plain', true);
             $response->end();
         });
@@ -98,7 +107,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
     public function testCookie()
     {
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-            $response = new Proxy($response);
+            $response = $this->proxy($response);
             $response->cookie('SID', 'test 123');
             $response->end();
         });
@@ -112,7 +121,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
     public function testRawCookie()
     {
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-            $response = new Proxy($response);
+            $response = $this->proxy($response);
             $response->rawcookie('SID', 'test 123');
             $response->end();
         });
@@ -126,7 +135,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
     public function testStatus()
     {
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-            $response = new Proxy($response);
+            $response = $this->proxy($response);
             $response->status(404);
             $response->end();
         });
@@ -144,7 +153,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         }
         
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-            $response = new Proxy($response);
+            $response = $this->proxy($response);
             $response->status(404, 'Missing');
             $response->end();
         });
@@ -161,7 +170,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         }
         
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-            $response = new Proxy($response);
+            $response = $this->proxy($response);
             $response->gzip();
             $response->end('Test');
         });
@@ -175,7 +184,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
     public function testSendfile()
     {
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-            $response = new Proxy($response);
+            $response = $this->proxy($response);
             $response->sendfile(__DIR__ . '/../../_files/fixture.txt');
         });
         $this->spawn($this->server);
@@ -185,11 +194,11 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         $this->assertContains("Content-Length: 10\r\n\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\n0123456789", $result);
     }
-    
+
     public function testSendfileOffset()
     {
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-            $response = new Proxy($response);
+            $response = $this->proxy($response);
             $response->sendfile(__DIR__ . '/../../_files/fixture.txt', 4);
         });
         $this->spawn($this->server);
@@ -199,11 +208,11 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         $this->assertContains("Content-Length: 6\r\n\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\n456789", $result);
     }
-    
+
     public function testSendfileOffsetLength()
     {
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-            $response = new Proxy($response);
+            $response = $this->proxy($response);
             $response->sendfile(__DIR__ . '/../../_files/fixture.txt', 4, 3);
         });
         $this->spawn($this->server);
