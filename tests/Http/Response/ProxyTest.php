@@ -50,7 +50,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
         $this->assertContains("Content-Length: 4\r\n", $result);
-        $this->assertContains("\r\n\r\nTest", $result);
+        $this->assertStringEndsWith("\r\n\r\nTest", $result);
     }
 
     public function testWriteContent()
@@ -64,7 +64,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertContains("\r\n\r\nTest1Test2", $result);
+        $this->assertStringEndsWith("\r\n\r\nTest1Test2", $result);
     }
 
     public function testHeader()
@@ -183,7 +183,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
         $this->assertContains("Content-Length: 10\r\n\r\n", $result);
-        $this->assertContains("\r\n\r\n0123456789", $result);
+        $this->assertStringEndsWith("\r\n\r\n0123456789", $result);
     }
     
     public function testSendfileOffset()
@@ -197,7 +197,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
         $this->assertContains("Content-Length: 6\r\n\r\n", $result);
-        $this->assertContains("\r\n\r\n456789", $result);
+        $this->assertStringEndsWith("\r\n\r\n456789", $result);
     }
     
     public function testSendfileOffsetLength()
@@ -211,6 +211,6 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
         $this->assertContains("Content-Length: 3\r\n\r\n", $result);
-        $this->assertContains("\r\n\r\n456", $result);
+        $this->assertStringEndsWith("\r\n\r\n456", $result);
     }
 }
