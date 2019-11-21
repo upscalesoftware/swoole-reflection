@@ -17,12 +17,16 @@
     },
     "require-dev": {
         "ext-curl": "*",
-        "phpunit/phpunit": "^7.0"
+        "phpunit/phpunit": "^7.0",
+        "upscale/swoole-launchpad": "^1.0"
     },
     "autoload": {
         "psr-4": {"Upscale\\Swoole\\Reflection\\": "src/"}
     },
     "autoload-dev": {
-        "psr-4": {"Upscale\\Swoole\\Reflection\\Tests\\": "tests/"}
+        "psr-4": {
+            "Upscale\\Swoole\\Reflection\\Tests\\": "tests/",
+            "Upscale\\Swoole\\Launchpad\\Tests\\": "vendor/upscale/swoole-launchpad/tests/"
+        }
     }
 }
