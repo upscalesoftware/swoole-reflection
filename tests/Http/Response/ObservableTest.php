@@ -60,7 +60,7 @@ class ObservableTest extends ProxyTest
     {
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
             $callback = function () use ($response) {
-                $response->header('Content-Type', 'text/plain');
+                $response->header('Content-Type', 'text/csv');
             };
             $response = $this->proxy($response);
             $response->onHeadersSentBefore($callback);
@@ -70,7 +70,7 @@ class ObservableTest extends ProxyTest
 
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertContains("Content-Type: text/plain\r\n", $result);
+        $this->assertContains("Content-Type: text/csv\r\n", $result);
         $this->assertContains("Content-Length: 10\r\n\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\n0123456789", $result);
     }
