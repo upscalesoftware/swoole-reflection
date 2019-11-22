@@ -21,10 +21,11 @@ class ObservableTest extends ProxyTest
     public function testOnHeadersSentBeforeEnd()
     {
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-            $response = $this->proxy($response);
-            $response->onHeadersSentBefore(function () use ($response) {
+            $callback = function () use ($response) {
                 $response->header('Content-Type', 'text/plain');
-            });
+            };
+            $response = $this->proxy($response);
+            $response->onHeadersSentBefore($callback);
             $response->end('Test');
         });
         $this->spawn($this->server);
@@ -39,14 +40,13 @@ class ObservableTest extends ProxyTest
     public function testOnHeadersSentBeforeWrite()
     {
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-            $response = $this->proxy($response);
-            $response->onHeadersSentBefore(function () use ($response) {
+            $callback = function () use ($response) {
                 $response->header('Content-Type', 'text/plain');
-            });
+            };
+            $response = $this->proxy($response);
+            $response->onHeadersSentBefore($callback);
             $response->write('Test1');
             $response->write('Test2');
-            // TODO: remove explicit response end to match the native behavior
-            $response->end();
         });
         $this->spawn($this->server);
 
@@ -54,17 +54,16 @@ class ObservableTest extends ProxyTest
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
         $this->assertContains("Content-Type: text/plain\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\nTest1Test2", $result);
-        
-        $this->markTestIncomplete('Fix circular references holding up implicit response end');
     }
 
     public function testOnHeadersSentBeforeSendfile()
     {
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-            $response = $this->proxy($response);
-            $response->onHeadersSentBefore(function () use ($response) {
+            $callback = function () use ($response) {
                 $response->header('Content-Type', 'text/plain');
-            });
+            };
+            $response = $this->proxy($response);
+            $response->onHeadersSentBefore($callback);
             $response->sendfile(__DIR__ . '/../../_files/fixture.txt');
         });
         $this->spawn($this->server);

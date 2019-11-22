@@ -41,15 +41,22 @@ $server->start();
 Modify response headers before they have been sent:
 ```php
 $server->on('request', function ($request, $response) {
-    $response = new \Upscale\Swoole\Reflection\Http\Response\Observable($response);
-    $response->onHeadersSentBefore(function () use ($request, $response) {
+    $callback = function () use ($request, $response) {
         $response->header('Content-Type', 'text/plain');
-    });    
+    };
+    $response = new \Upscale\Swoole\Reflection\Http\Response\Observable($response);
+    $response->onHeadersSentBefore($callback);    
     $response->end("Served by Swoole server\n");
 });
 ```
 
 Callback is invoked once per request upon the first call to `\Swoole\Http\Response::write/end/sendfile()` methods.
+
+**Warning!** Callbacks that need to modify the response must use the original response rather than its observable proxy.
+Dependency on observable proxy creates circular reference between the observable and callbacks registered within it.
+Instances involved in orphan circular cross-references will not be destroyed until the next garbage collection takes place.
+Swoole sends out response by calling `\Swoole\Http\Response::end()` in the destructor upon the request completion.
+The response destructor will not be called causing the the worker to hang up without sending the response. 
 
 #### Body Interception
 
