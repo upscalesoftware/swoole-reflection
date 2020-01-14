@@ -13,6 +13,13 @@ env:
   - SWOOLE_VERSION=swoole-4.4.8
   - SWOOLE_VERSION=swoole
 
+jobs:
+  include:
+  - php: 7.4
+    env: SWOOLE_VERSION=swoole-4.4.8
+  - php: 7.4
+    env: SWOOLE_VERSION=swoole
+
 before_install:
   - phpenv config-rm xdebug.ini
   - pecl channel-update pecl.php.net
