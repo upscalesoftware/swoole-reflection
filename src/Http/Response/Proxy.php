@@ -56,42 +56,56 @@ class Proxy extends \Swoole\Http\Response
 
     /**
      * @param string $name
-     * @param string $value
-     * @param int $expires
-     * @param string $path
-     * @param string $domain
-     * @param bool $secure
-     * @param bool $httponly
-     * @param bool $samesite
+     * @param string|null $value
+     * @param int|null $expires
+     * @param string|null $path
+     * @param string|null $domain
+     * @param bool|null $secure
+     * @param bool|null $httponly
+     * @param string|null $samesite
+     * @param string|null $priority
      * @return mixed
      */
     public function cookie(
-        $name, $value = null, $expires = null, $path = null, $domain = null, $secure = null, $httponly = null, $samesite = null
+        $name,
+        $value = null,
+        $expires = null,
+        $path = null,
+        $domain = null,
+        $secure = null,
+        $httponly = null,
+        $samesite = null,
+        $priority = null
     ) {
-        $result = ($samesite === null)
-            ? $this->subject->cookie($name, $value, $expires, $path, $domain, $secure, $httponly)
-            : $this->subject->cookie($name, $value, $expires, $path, $domain, $secure, $httponly, $samesite);
+        $result = $this->subject->cookie(...func_get_args());
         $this->cookie = $this->subject->cookie;
         return $result;
     }
 
     /**
      * @param string $name
-     * @param string $value
-     * @param int $expires
-     * @param string $path
-     * @param string $domain
-     * @param bool $secure
-     * @param bool $httponly
-     * @param bool $samesite
+     * @param string|null $value
+     * @param int|null $expires
+     * @param string|null $path
+     * @param string|null $domain
+     * @param bool|null $secure
+     * @param bool|null $httponly
+     * @param string|null $samesite
+     * @param string|null $priority
      * @return mixed
      */
     public function rawcookie(
-        $name, $value = null, $expires = null, $path = null, $domain = null, $secure = null, $httponly = null, $samesite = null
+        $name,
+        $value = null,
+        $expires = null,
+        $path = null,
+        $domain = null,
+        $secure = null,
+        $httponly = null,
+        $samesite = null,
+        $priority = null
     ) {
-        $result = ($samesite === null)
-            ? $this->subject->rawcookie($name, $value, $expires, $path, $domain, $secure, $httponly)
-            : $this->subject->rawcookie($name, $value, $expires, $path, $domain, $secure, $httponly, $samesite);
+        $result = $this->subject->rawcookie(...func_get_args());
         $this->cookie = $this->subject->cookie;
         return $result;
     }
