@@ -50,12 +50,12 @@ $server->on('request', function ($request, $response) {
 });
 ```
 
-Callback is invoked once per request upon the first call to `\Swoole\Http\Response::write/end/sendfile()` methods.
+Callback is invoked on every request upon the first call to `\Swoole\Http\Response::write/end/sendfile()`.
 
-**Warning!** Callbacks that need to modify the response must use the original response rather than its observable proxy.
-Dependency on observable proxy creates circular reference between the observable and callbacks registered within it.
-Instances involved in orphan circular cross-references will not be destroyed until the next garbage collection takes place.
-Swoole sends out response by calling `\Swoole\Http\Response::end()` in the destructor upon the request completion.
+**Warning!** Callbacks that need to modify response must use the original response rather than its observable proxy.
+Dependency on observable proxy creates circular reference between the proxy and callbacks registered within it.
+Instances involved in orphan circular cross-references will not be destroyed until the next garbage collection cycle.
+Swoole calls `\Swoole\Http\Response::end()` in the response destructor executed upon the request completion.
 The response destructor will not be called causing the the worker to hang up without sending the response. 
 
 #### Body Interception
@@ -72,7 +72,7 @@ $server->on('request', function ($request, $response) use ($server) {
 });
 ```
 
-Callback is invoked on every call to `\Swoole\Http\Response::write/end()` methods with non-empty content.
+Callback is invoked on every call to `\Swoole\Http\Response::write/end()` with non-empty contents.
 
 ## Contributing
 
