@@ -20,8 +20,12 @@ jobs:
           - swoole-4.3.6
           - swoole-4.4.23
           - swoole-4.5.10
+          - swoole-4.6.0
           - swoole
         exclude:
+          - os: ubuntu-latest
+            php-version: '7.1'
+            swoole-version: swoole-4.6.0
           - os: ubuntu-latest
             php-version: '7.1'
             swoole-version: swoole
@@ -32,6 +36,9 @@ jobs:
           - os: ubuntu-latest
             php-version: '7.4'
             swoole-version: swoole-4.5.10
+          - os: ubuntu-latest
+            php-version: '7.4'
+            swoole-version: swoole-4.6.0
           - os: ubuntu-latest
             php-version: '7.4'
             swoole-version: swoole
