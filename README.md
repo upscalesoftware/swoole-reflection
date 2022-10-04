@@ -1,4 +1,4 @@
-Swoole Reflection API [![Build Status](https://github.com/upscalesoftware/swoole-reflection/workflows/Tests/badge.svg?branch=master)](https://github.com/upscalesoftware/swoole-reflection/actions?query=workflow%3ATests+branch%3Amaster)
+OpenSwoole Reflection API [![Build Status](https://github.com/upscalesoftware/swoole-reflection/workflows/Tests/badge.svg?branch=master)](https://github.com/upscalesoftware/swoole-reflection/actions?query=workflow%3ATests+branch%3Amaster)
 =====================
 
 This library provides a [Reflection API](http://us3.php.net/manual/en/intro.reflection.php) for classes of [Swoole](https://www.swoole.co.uk/) web-server.
@@ -11,7 +11,7 @@ This library provides a [Reflection API](http://us3.php.net/manual/en/intro.refl
 
 The library is to be installed via [Composer](https://getcomposer.org/) as a dependency:
 ```bash
-composer require upscale/swoole-reflection
+composer require pixelfederation/openswoole-reflection
 ```
 ## Usage
 

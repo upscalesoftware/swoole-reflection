@@ -1,5 +1,5 @@
 {
-    "name": "upscale/swoole-reflection",
+    "name": "pixelfederation/openswoole-reflection",
     "description": "Reflection API for Swoole web-server",
     "version": "1.4.0",
     "keywords": ["Swoole", "reflection", "middleware", "headers", "body", "event", "observer", "subscription"],
