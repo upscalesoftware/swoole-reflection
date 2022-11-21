@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright © Upscale Software. All rights reserved.
  * See LICENSE.txt for license details.
@@ -6,14 +7,11 @@
 namespace Upscale\Swoole\Reflection\Tests\Http\Response;
 
 use Upscale\Swoole\Reflection\Http\Response\Observable;
+use Upscale\Swoole\Reflection\Http\Response\Proxy;
 
 class ObservableTest extends ProxyTest
 {
-    /**
-     * @param \Swoole\Http\Response $response
-     * @return Observable
-     */
-    protected function proxy(\Swoole\Http\Response $response)
+    protected function proxy(\Swoole\Http\Response $response): Proxy
     {
         return new Observable($response);
     }
@@ -32,8 +30,8 @@ class ObservableTest extends ProxyTest
 
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertContains("Content-Length: 4\r\n", $result);
-        $this->assertContains("Content-Type: text/plain\r\n", $result);
+        $this->assertStringContainsString("Content-Length: 4\r\n", $result);
+        $this->assertStringContainsString("Content-Type: text/plain\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\nTest", $result);
     }
     
@@ -52,7 +50,7 @@ class ObservableTest extends ProxyTest
 
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertContains("Content-Type: text/plain\r\n", $result);
+        $this->assertStringContainsString("Content-Type: text/plain\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\nTest1Test2", $result);
     }
 
@@ -70,8 +68,8 @@ class ObservableTest extends ProxyTest
 
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertContains("Content-Type: text/csv\r\n", $result);
-        $this->assertContains("Content-Length: 10\r\n\r\n", $result);
+        $this->assertStringContainsString("Content-Type: text/csv\r\n", $result);
+        $this->assertStringContainsString("Content-Length: 10\r\n\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\n0123456789", $result);
     }
 
@@ -88,8 +86,8 @@ class ObservableTest extends ProxyTest
 
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertContains("Content-Length: 31\r\n", $result);
-        $this->assertContains("Content-Type: text/html\r\n", $result);
+        $this->assertStringContainsString("Content-Length: 31\r\n", $result);
+        $this->assertStringContainsString("Content-Type: text/html\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\nTest<!-- Served by worker 0 -->", $result);
     }
     
@@ -107,7 +105,7 @@ class ObservableTest extends ProxyTest
 
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertContains("Content-Type: text/html\r\n", $result);
+        $this->assertStringContainsString("Content-Type: text/html\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\n<!-- Test1 --><!-- Test2 -->", $result);
     }
 }

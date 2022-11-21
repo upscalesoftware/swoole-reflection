@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright © Upscale Software. All rights reserved.
  * See LICENSE.txt for license details.
@@ -9,12 +10,9 @@ use Upscale\Swoole\Reflection\Http\Response\Proxy;
 
 class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
 {
-    /**
-     * @var \Swoole\Http\Server
-     */
-    protected $server;
+    protected \Swoole\Http\Server $server;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         
@@ -26,11 +24,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         ]);
     }
 
-    /**
-     * @param \Swoole\Http\Response $response
-     * @return Proxy
-     */
-    protected function proxy(\Swoole\Http\Response $response)
+    protected function proxy(\Swoole\Http\Response $response): Proxy
     {
         return new Proxy($response);
     }
@@ -45,7 +39,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
 
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertContains("Content-Length: 0\r\n\r\n", $result);
+        $this->assertStringContainsString("Content-Length: 0\r\n\r\n", $result);
     }
 
     public function testEndContent()
@@ -58,8 +52,8 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertContains("Content-Type: text/html\r\n", $result);
-        $this->assertContains("Content-Length: 4\r\n", $result);
+        $this->assertStringContainsString("Content-Type: text/html\r\n", $result);
+        $this->assertStringContainsString("Content-Length: 4\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\nTest", $result);
     }
 
@@ -74,7 +68,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertContains("Content-Type: text/html\r\n", $result);
+        $this->assertStringContainsString("Content-Type: text/html\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\nTest1Test2", $result);
     }
 
@@ -89,7 +83,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertContains("Content-Type: text/plain\r\n", $result);
+        $this->assertStringContainsString("Content-Type: text/plain\r\n", $result);
     }
 
     public function testHeaderUcwords()
@@ -103,7 +97,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertContains("Content-Type: text/plain\r\n", $result);
+        $this->assertStringContainsString("Content-Type: text/plain\r\n", $result);
     }
 
     public function testCookie()
@@ -117,7 +111,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertContains("Set-Cookie: SID=test+123\r\n", $result);
+        $this->assertStringContainsString("Set-Cookie: SID=test+123\r\n", $result);
     }
 
     public function testRawCookie()
@@ -131,7 +125,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertContains("Set-Cookie: SID=test 123\r\n", $result);
+        $this->assertStringContainsString("Set-Cookie: SID=test 123\r\n", $result);
     }
 
     public function testStatus()
@@ -149,11 +143,6 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
 
     public function testStatusReason()
     {
-        $method = new \ReflectionMethod(\Swoole\Http\Response::class, 'status');
-        if ($method->getNumberOfParameters() < 2) {
-            $this->markTestSkipped();
-        }
-        
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
             $response = $this->proxy($response);
             $response->status(404, 'Missing');
@@ -193,7 +182,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertContains("Content-Length: 10\r\n\r\n", $result);
+        $this->assertStringContainsString("Content-Length: 10\r\n\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\n0123456789", $result);
     }
 
@@ -207,7 +196,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertContains("Content-Length: 6\r\n\r\n", $result);
+        $this->assertStringContainsString("Content-Length: 6\r\n\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\n456789", $result);
     }
 
@@ -221,7 +210,7 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertContains("Content-Length: 3\r\n\r\n", $result);
+        $this->assertStringContainsString("Content-Length: 3\r\n\r\n", $result);
         $this->assertStringEndsWith("\r\n\r\n456", $result);
     }
 }

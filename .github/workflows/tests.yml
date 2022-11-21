@@ -4,6 +4,7 @@ on:
   pull_request:
   schedule:
     - cron: '0 0 * * 6'
+
 jobs:
   tests:
     name: Test ${{ matrix.swoole-version }} against php ${{ matrix.php-version }} on ${{ matrix.os }}
@@ -12,39 +13,21 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        php-version: ['7.1', '7.2', '7.3']
+        php-version: [ '8.0', '8.1' ]
         swoole-version:
-          - swoole-4.0.4
-          - swoole-4.1.2
-          - swoole-4.2.13
-          - swoole-4.3.6
-          - swoole-4.4.23
-          - swoole-4.5.10
-          - swoole-4.6.0
+          - swoole-4.4.26
+          - swoole-4.5.11
+          - swoole-4.6.7
+          - swoole-4.7.1
+          - swoole-4.8.12
           - swoole
-        exclude:
-          - os: ubuntu-latest
-            php-version: '7.1'
-            swoole-version: swoole-4.6.0
-          - os: ubuntu-latest
-            php-version: '7.1'
-            swoole-version: swoole
         include:
           - os: ubuntu-latest
-            php-version: '7.4'
-            swoole-version: swoole-4.4.23
-          - os: ubuntu-latest
-            php-version: '7.4'
-            swoole-version: swoole-4.5.10
-          - os: ubuntu-latest
-            php-version: '7.4'
-            swoole-version: swoole-4.6.0
-          - os: ubuntu-latest
-            php-version: '7.4'
-            swoole-version: swoole
+            php-version: '8.2'
+            swoole-version: swoole-4.8.12
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup PHP environment
         uses: shivammathur/setup-php@v2
         with:

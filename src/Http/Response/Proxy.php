@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright © Upscale Software. All rights reserved.
  * See LICENSE.txt for license details.
@@ -7,16 +8,8 @@ namespace Upscale\Swoole\Reflection\Http\Response;
 
 class Proxy extends \Swoole\Http\Response
 {
-    /**
-     * @var \Swoole\Http\Response 
-     */
-    protected $subject;
+    protected \Swoole\Http\Response $subject;
     
-    /**
-     * Inject dependencies
-     * 
-     * @param \Swoole\Http\Response $subject
-     */
     public function __construct(\Swoole\Http\Response $subject)
     {
         $this->subject = $subject;
@@ -44,12 +37,12 @@ class Proxy extends \Swoole\Http\Response
     /**
      * @param string $key
      * @param string $value
-     * @param bool $ucwords
+     * @param bool $format
      * @return mixed
      */
-    public function header($key, $value, $ucwords = null)
+    public function header($key, $value, $format = true)
     {
-        $result = $this->subject->header($key, $value, $ucwords);
+        $result = $this->subject->header($key, $value, $format);
         $this->header = $this->subject->header;
         return $result;
     }
@@ -137,7 +130,7 @@ class Proxy extends \Swoole\Http\Response
      * @param int $length
      * @return mixed
      */
-    public function sendfile($filename, $offset = null, $length = null)
+    public function sendfile($filename, $offset = 0, $length = 0)
     {
         return $this->subject->sendfile($filename, $offset, $length);
     }

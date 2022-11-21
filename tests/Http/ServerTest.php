@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright © Upscale Software. All rights reserved.
  * See LICENSE.txt for license details.
@@ -9,17 +10,11 @@ use Upscale\Swoole\Reflection\Http\Server;
 
 class ServerTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Swoole\Http\Server
-     */
-    protected $server;
+    protected \Swoole\Http\Server $server;
 
-    /**
-     * @var Server
-     */
-    protected $subject;
+    protected Server $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->server = new \Swoole\Http\Server('127.0.0.1', 8080);
         $this->subject = new Server($this->server);
@@ -30,12 +25,11 @@ class ServerTest extends \PHPUnit\Framework\TestCase
         $this->fail('Unexpected invocation');
     }
 
-    /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Server middleware has not been detected
-     */
     public function testGetMiddlewareException()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Server middleware has not been detected');
+
         $this->subject->getMiddleware();
     }
 

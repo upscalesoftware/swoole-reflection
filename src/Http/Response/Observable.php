@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright © Upscale Software. All rights reserved.
  * See LICENSE.txt for license details.
@@ -7,20 +8,17 @@ namespace Upscale\Swoole\Reflection\Http\Response;
 
 class Observable extends Proxy
 {
-    /**
-     * @var bool
-     */
-    protected $isHeadersSent = false;
+    protected bool $isHeadersSent = false;
     
     /**
-     * @var callable[] 
+     * @var callable[]
      */
-    protected $headersSentObservers = [];
+    protected array $headersSentObservers = [];
 
     /**
-     * @var callable[] 
+     * @var callable[]
      */
-    protected $bodyAppendObservers = [];
+    protected array $bodyAppendObservers = [];
 
     /**
      * {@inheritdoc}
@@ -45,7 +43,7 @@ class Observable extends Proxy
     /**
      * {@inheritdoc}
      */
-    public function sendfile($filename, $offset = null, $length = null)
+    public function sendfile($filename, $offset = 0, $length = 0)
     {
         $this->doHeadersSentBefore();
         return parent::sendfile($filename, $offset, $length);
@@ -53,8 +51,6 @@ class Observable extends Proxy
 
     /**
      * Subscribe a callback to be notified before sending headers
-     * 
-     * @param callable $callback
      */
     public function onHeadersSentBefore(callable $callback)
     {
@@ -63,8 +59,6 @@ class Observable extends Proxy
 
     /**
      * Subscribe a callback to be notified upon appending body content
-     * 
-     * @param callable $callback
      */
     public function onBodyAppend(callable $callback)
     {
@@ -85,10 +79,8 @@ class Observable extends Proxy
     }
     /**
      * Notify registered body lifecycle observers allowing them to modify content 
-     * 
-     * @param string $content
      */
-    protected function doBodyAppend(&$content)
+    protected function doBodyAppend(string &$content)
     {
         if (strlen($content) > 0) {
             foreach ($this->bodyAppendObservers as $callback) {
