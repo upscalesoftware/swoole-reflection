@@ -21,6 +21,7 @@ jobs:
           - swoole-4.7.1
           - swoole-4.8.12
           - swoole
+          - openswoole-4.7.2
         include:
           - os: ubuntu-latest
             php-version: '8.2'
@@ -38,7 +39,7 @@ jobs:
         env:
           fail-fast: true
       - name: Verify PHP environment
-        run: php --ri swoole
+        run: php --ri swoole || php --ri openswoole
       - name: Install dependencies
         run: composer install -n
       - name: Run test suite

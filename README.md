@@ -1,7 +1,7 @@
 Swoole Reflection API [![Build Status](https://github.com/upscalesoftware/swoole-reflection/workflows/Tests/badge.svg?branch=master)](https://github.com/upscalesoftware/swoole-reflection/actions?query=workflow%3ATests+branch%3Amaster)
 =====================
 
-This library provides a [Reflection API](http://us3.php.net/manual/en/intro.reflection.php) for classes of [Swoole](https://www.swoole.co.uk/) web-server.
+This library provides a [Reflection API](http://us3.php.net/manual/en/intro.reflection.php) for classes of [Swoole](https://github.com/swoole/swoole-src) / [Open Swoole](https://github.com/openswoole/swoole-src) web-server.
 
 **Features:**
 - Server middleware manipulation
