@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=8.0",
-        "ext-swoole": "^4.1.1"
+        "ext-swoole": "^4.4.8"
     },
     "require-dev": {
         "ext-curl": "*",
