@@ -154,24 +154,6 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         $this->assertStringStartsWith("HTTP/1.1 404 Missing\r\n", $result);
     }
 
-    public function testGzip()
-    {
-        if (version_compare(swoole_version(), '4.1.1', '>=')) {
-            $this->markTestSkipped();
-        }
-        
-        $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-            $response = $this->proxy($response);
-            $response->gzip();
-            $response->end('Test');
-        });
-        $this->spawn($this->server);
-        
-        $result = $this->curl('http://127.0.0.1:8080/');
-        $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertContains("Content-Encoding: gzip\r\n", $result);
-    }
-
     public function testSendfile()
     {
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {

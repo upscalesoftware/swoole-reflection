@@ -116,15 +116,6 @@ class Proxy extends \Swoole\Http\Response
     }
 
     /**
-     * @param int $level
-     * @return mixed
-     */
-    public function gzip($level = 1)
-    {
-        return $this->subject->gzip($level);
-    }
-
-    /**
      * @param string $filename
      * @param int $offset
      * @param int $length
