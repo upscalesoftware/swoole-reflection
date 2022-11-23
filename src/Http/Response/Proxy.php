@@ -16,110 +16,61 @@ class Proxy extends \Swoole\Http\Response
         $this->fd = $subject->fd;
     }
 
-    /**
-     * @param string $content
-     * @return mixed
-     */
-    public function end($content = '')
+    public function end(?string $content = null): bool
     {
         return $this->subject->end($content);
     }
 
-    /**
-     * @param string $content
-     * @return mixed
-     */
-    public function write($content)
+    public function write(string $content): bool
     {
         return $this->subject->write($content);
     }
 
-    /**
-     * @param string $key
-     * @param string $value
-     * @param bool $format
-     * @return mixed
-     */
-    public function header($key, $value, $format = true)
+    public function header(string $key, array|string $value, bool $format = true): bool
     {
         $result = $this->subject->header($key, $value, $format);
         $this->header = $this->subject->header;
         return $result;
     }
 
-    /**
-     * @param string $name
-     * @param string|null $value
-     * @param int|null $expires
-     * @param string|null $path
-     * @param string|null $domain
-     * @param bool|null $secure
-     * @param bool|null $httponly
-     * @param string|null $samesite
-     * @param string|null $priority
-     * @return mixed
-     */
     public function cookie(
-        $name,
-        $value = null,
-        $expires = null,
-        $path = null,
-        $domain = null,
-        $secure = null,
-        $httponly = null,
-        $samesite = null,
-        $priority = null
-    ) {
+        string $name,
+        ?string $value = '',
+        int $expires = 0,
+        string $path = '/',
+        string $domain = '',
+        bool $secure = false,
+        bool $httponly = false,
+        string $samesite = '',
+        string $priority = ''
+    ): bool {
         $result = $this->subject->cookie(...func_get_args());
         $this->cookie = $this->subject->cookie;
         return $result;
     }
 
-    /**
-     * @param string $name
-     * @param string|null $value
-     * @param int|null $expires
-     * @param string|null $path
-     * @param string|null $domain
-     * @param bool|null $secure
-     * @param bool|null $httponly
-     * @param string|null $samesite
-     * @param string|null $priority
-     * @return mixed
-     */
     public function rawcookie(
-        $name,
-        $value = null,
-        $expires = null,
-        $path = null,
-        $domain = null,
-        $secure = null,
-        $httponly = null,
-        $samesite = null,
-        $priority = null
-    ) {
+        string $name,
+        ?string $value = '',
+        int $expires = 0,
+        string $path = '/',
+        string $domain = '',
+        bool $secure = false,
+        bool $httponly = false,
+        string $samesite = '',
+        string $priority = ''
+    ): bool {
         $result = $this->subject->rawcookie(...func_get_args());
         $this->cookie = $this->subject->cookie;
         return $result;
     }
 
-    /**
-     * @param int $status
-     * @param string $reason
-     * @return mixed
-     */
-    public function status($status, $reason = '')
+    public function status(int $code, string $reason = ''): bool
     {
-        return $this->subject->status($status, $reason);
+        return $this->subject->status($code, $reason);
     }
 
-    /**
-     * @param string $filename
-     * @param int $offset
-     * @param int $length
-     * @return mixed
-     */
-    public function sendfile($filename, $offset = 0, $length = 0)
+    public function sendfile(string $filename, int $offset = 0, int $length = 0): bool
     {
         return $this->subject->sendfile($filename, $offset, $length);
     }

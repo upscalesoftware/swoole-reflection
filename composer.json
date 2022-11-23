@@ -1,7 +1,7 @@
 {
     "name": "upscale/swoole-reflection",
     "description": "Reflection API for Swoole web-server",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "keywords": ["Swoole", "reflection", "middleware", "headers", "body", "event", "observer", "subscription"],
     "homepage": "https://github.com/upscalesoftware/swoole-reflection",
     "license": "Apache-2.0",
@@ -13,8 +13,8 @@
     ],
     "require": {
         "php": ">=8.0",
-        "upscale/ext-swoole": "^4.4.8",
-        "upscale/ext-openswoole": "~4.7.0"
+        "upscale/ext-swoole": "^5.0",
+        "upscale/ext-openswoole": "^4.8"
     },
     "require-dev": {
         "ext-curl": "*",

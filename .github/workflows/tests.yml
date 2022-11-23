@@ -15,17 +15,22 @@ jobs:
         os: [ubuntu-latest]
         php-version: [ '8.0', '8.1' ]
         swoole-version:
-          - swoole-4.4.26
-          - swoole-4.5.11
-          - swoole-4.6.7
-          - swoole-4.7.1
-          - swoole-4.8.12
-          - swoole
-          - openswoole-4.7.2
+          - swoole-5.0.1
+          - openswoole-4.8.1
+          - openswoole-4.9.1
+          - openswoole-4.10.0
+          - openswoole-4.11.1
+          - openswoole-4.12.0
         include:
           - os: ubuntu-latest
             php-version: '8.2'
-            swoole-version: swoole-4.8.12
+            swoole-version: swoole-5.0.1
+          - os: ubuntu-latest
+            php-version: '8.2'
+            swoole-version: swoole
+          - os: ubuntu-latest
+            php-version: '8.2'
+            swoole-version: openswoole-4.12.0
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3

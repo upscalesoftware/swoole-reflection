@@ -20,20 +20,14 @@ class Observable extends Proxy
      */
     protected array $bodyAppendObservers = [];
 
-    /**
-     * {@inheritdoc}
-     */
-    public function end($content = '')
+    public function end(?string $content = null): bool
     {
         $this->doHeadersSentBefore();
         $this->doBodyAppend($content);
         return parent::end($content);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function write($content)
+    public function write(string $content): bool
     {
         $this->doHeadersSentBefore();
         $this->doBodyAppend($content);
@@ -43,7 +37,7 @@ class Observable extends Proxy
     /**
      * {@inheritdoc}
      */
-    public function sendfile($filename, $offset = 0, $length = 0)
+    public function sendfile(string $filename, int $offset = 0, int $length = 0): bool
     {
         $this->doHeadersSentBefore();
         return parent::sendfile($filename, $offset, $length);
@@ -52,7 +46,7 @@ class Observable extends Proxy
     /**
      * Subscribe a callback to be notified before sending headers
      */
-    public function onHeadersSentBefore(callable $callback)
+    public function onHeadersSentBefore(callable $callback): void
     {
         $this->headersSentObservers[] = $callback;
     }
@@ -60,7 +54,7 @@ class Observable extends Proxy
     /**
      * Subscribe a callback to be notified upon appending body content
      */
-    public function onBodyAppend(callable $callback)
+    public function onBodyAppend(callable $callback): void
     {
         $this->bodyAppendObservers[] = $callback;
     }
@@ -68,7 +62,7 @@ class Observable extends Proxy
     /**
      * Notify registered header lifecycle observers
      */
-    protected function doHeadersSentBefore()
+    protected function doHeadersSentBefore(): void
     {
         if (!$this->isHeadersSent) {
             $this->isHeadersSent = true;
@@ -80,9 +74,9 @@ class Observable extends Proxy
     /**
      * Notify registered body lifecycle observers allowing them to modify content 
      */
-    protected function doBodyAppend(string &$content)
+    protected function doBodyAppend(?string &$content): void
     {
-        if (strlen($content) > 0) {
+        if ($content !== null && strlen($content) > 0) {
             foreach ($this->bodyAppendObservers as $callback) {
                 $callback($content);
             }
