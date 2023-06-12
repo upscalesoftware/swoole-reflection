@@ -14,7 +14,7 @@
     "require": {
         "php": ">=8.0",
         "upscale/ext-swoole": "^5.0",
-        "upscale/ext-openswoole": "^4.8"
+        "upscale/ext-openswoole": "^4.8||^22.0"
     },
     "require-dev": {
         "ext-curl": "*",
