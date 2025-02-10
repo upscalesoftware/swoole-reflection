@@ -104,7 +104,21 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
     {
         $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
             $response = $this->proxy($response);
-            $response->cookie('SID', 'test 123');
+            $response->cookie('SID', 'test+123');
+            $response->end();
+        });
+        $this->spawn($this->server);
+        
+        $result = $this->curl('http://127.0.0.1:8080/');
+        $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
+        $this->assertStringContainsString("Set-Cookie: SID=test%2B123\r\n", $result);
+    }
+
+    public function testRawCookie()
+    {
+        $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
+            $response = $this->proxy($response);
+            $response->rawcookie('SID', 'test+123');
             $response->end();
         });
         $this->spawn($this->server);
@@ -112,20 +126,6 @@ class ProxyTest extends \Upscale\Swoole\Launchpad\Tests\TestCase
         $result = $this->curl('http://127.0.0.1:8080/');
         $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
         $this->assertStringContainsString("Set-Cookie: SID=test+123\r\n", $result);
-    }
-
-    public function testRawCookie()
-    {
-        $this->server->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) {
-            $response = $this->proxy($response);
-            $response->rawcookie('SID', 'test 123');
-            $response->end();
-        });
-        $this->spawn($this->server);
-        
-        $result = $this->curl('http://127.0.0.1:8080/');
-        $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", $result);
-        $this->assertStringContainsString("Set-Cookie: SID=test 123\r\n", $result);
     }
 
     public function testStatus()
