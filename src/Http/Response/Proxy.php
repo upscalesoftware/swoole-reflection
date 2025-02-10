@@ -33,34 +33,14 @@ class Proxy extends \Swoole\Http\Response
         return $result;
     }
 
-    public function cookie(
-        string $name,
-        ?string $value = '',
-        int $expires = 0,
-        string $path = '/',
-        string $domain = '',
-        bool $secure = false,
-        bool $httponly = false,
-        string $samesite = '',
-        string $priority = ''
-    ): bool {
-        $result = $this->subject->cookie(...func_get_args());
+    public function cookie(...$args): bool {
+        $result = $this->subject->cookie(...$args);
         $this->cookie = $this->subject->cookie;
         return $result;
     }
 
-    public function rawcookie(
-        string $name,
-        ?string $value = '',
-        int $expires = 0,
-        string $path = '/',
-        string $domain = '',
-        bool $secure = false,
-        bool $httponly = false,
-        string $samesite = '',
-        string $priority = ''
-    ): bool {
-        $result = $this->subject->rawcookie(...func_get_args());
+    public function rawcookie(...$args): bool {
+        $result = $this->subject->rawcookie(...$args);
         $this->cookie = $this->subject->cookie;
         return $result;
     }
