@@ -1,7 +1,7 @@
 {
     "name": "upscale/swoole-reflection",
     "description": "Reflection API for Swoole web-server",
-    "version": "3.1.0",
+    "version": "3.2.0",
     "keywords": ["Swoole", "reflection", "middleware", "headers", "body", "event", "observer", "subscription"],
     "homepage": "https://github.com/upscalesoftware/swoole-reflection",
     "license": "Apache-2.0",
